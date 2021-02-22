@@ -1,0 +1,57 @@
+{
+  "variables": {
+    "sl_username": "{{env  `SL_USERNAME`}}",
+    "sl_api_key": "{{env `SL_API_KEY`}}",
+    "ansible_inventory_file": "{{env `ANSIBLE_INVENTORY_FILE`}}",
+    "private_key_file": "{{env `PRIVATEKEY`}}",
+    "public_key_file": "{{env `PUBLICKEY`}}"
+  },
+  "provisioners": [
+    {
+      "type": "shell",
+	"inline": ["yum install -y dnsmasq", "echo showing environment", "env"]
+    },
+    {
+      "type": "ansible",
+      "playbook_file": "provisioner/playbooklinux.yml",
+      "inventory_file": "{{user `ansible_inventory_file`}}",
+      "ssh_host_key_file": "{{user `private_key_file`}}",
+      "ssh_authorized_key_file": "{{user `public_key_file`}}",
+      "extra_arguments": [
+	      "-vvvv",
+        "--extra-vars",
+        "ansible_user=ubuntu --private-key={{user `private_key_file`}}"
+      ],
+      "ansible_env_vars": [
+        "ANSIBLE_HOST_KEY_CHECKING=False",
+        "ANSIBLE_SSH_ARGS='-o ForwardAgent=yes -o ControlMaster=auto -o ControlPersist=60s'",
+        "sudo_flags=-H -S"
+      ]
+    }
+  ],
+  "builders": [
+    {
+      "type": "ibmcloud",
+      "api_key": "{{user `sl_api_key`}}",
+      "username": "{{user `sl_username`}}",
+      "datacenter_name": "dal12",
+      "base_image_id": "5586378f-5f4f-4eac-9aa2-199fa53bb15e",
+      "image_name": "packer-image",
+      "instance_name": "packer-vsi",
+      "image_description": "Centos image created by packer at {{isotime}}",
+      "image_type": "standard",
+      "upload_to_datacenters": [
+        "352494"
+      ],
+      "instance_domain": "provisioning.com",
+      "instance_cpu": 2,
+      "instance_memory": 4096,
+      "instance_network_speed": 10,
+      "instance_disk_capacity": 25,
+      "ssh_port": 22,
+      "ssh_timeout": "15m",
+      "instance_state_timeout": "25m",
+      "communicator": "ssh"
+    }
+  ]
+}
