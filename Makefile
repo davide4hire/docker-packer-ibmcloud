@@ -70,7 +70,10 @@ $(TMP_DIR) $(PACKER_LOG_DIR):
 ##	touch $@
 
 $(SECRETS_FILE):
-	@echo "The .env file must contain credintials" && exit 2
+	@echo "The .env file must contain values for SL_API_KEY and SL_USERNAME"
+	@echo "Format should be"
+	@echo "SL_API_KEY=c95b3e4430e04d44405bf9f39caa189735cdc2d0ed0d9f8f0f3eba89bccb9784\nSL_USERNAME=<accnt#>_<useremail>"
+	@exit 2
 
 foo: $(SECRETS_FILE)
 	@echo PWD = $(PWD)
