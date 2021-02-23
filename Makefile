@@ -90,6 +90,9 @@ foo: $(SECRETS_FILE)
 container:
 	docker build -t "$(ContainerName)" $(DOCKER_BUILD) .
 
+publish:
+	docker push $(ContainerName)
+
 validate:  $(SECRETS_FILE) $(PACKER_LOG_DIR)
 	$(DOCKER_CMD) $(DOCKER_RUN) $(ContainerName) validate $(JSON_FILE)
 
