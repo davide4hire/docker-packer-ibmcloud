@@ -6,7 +6,7 @@ VERSION=1.0.9
 # These two vars specify the base URL and version of the base
 # packer container.
 PACKER_CONTAINER_URL=hashicorp/packer
-PACKER_CONTAINER_VERSION=latest
+PACKER_CONTAINER_VERSION=1.6.6
 
 # This is the version of the IBM Packer plugin and the SHA256 checksum
 PLUGIN_GIT_URL=https://github.com/IBM/packer-plugin-ibmcloud/releases/download

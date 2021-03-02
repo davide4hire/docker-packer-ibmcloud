@@ -3,13 +3,13 @@
 ##################################################
 
 VersionFile    = ./version.sh
-VERSION       := $(shell source $(VersionFile); echo $$VERSION)
-RELEASE       := $(shell source $(VersionFile); echo $$RELEASE)
-PACKER_CONTAINER_URL     := $(shell source $(VersionFile); echo $$PACKER_CONTAINER_URL)
-PACKER_CONTAINER_VERSION := $(shell source $(VersionFile); echo $$PACKER_CONTAINER_VERSION)
-PLUGIN_GIT_URL := $(shell source $(VersionFile); echo $$PLUGIN_GIT_URL)
-PLUGIN_VERSION := $(shell source $(VersionFile); echo $$PLUGIN_VERSION)
-PLUGIN_SHA     := $(shell source $(VersionFile); echo $$PLUGIN_SHA)
+VERSION       := $(shell . $(VersionFile); echo $$VERSION)
+RELEASE       := $(shell . $(VersionFile); echo $$RELEASE)
+PACKER_CONTAINER_URL     := $(shell . $(VersionFile); echo $$PACKER_CONTAINER_URL)
+PACKER_CONTAINER_VERSION := $(shell . $(VersionFile); echo $$PACKER_CONTAINER_VERSION)
+PLUGIN_GIT_URL := $(shell . $(VersionFile); echo $$PLUGIN_GIT_URL)
+PLUGIN_VERSION := $(shell . $(VersionFile); echo $$PLUGIN_VERSION)
+PLUGIN_SHA     := $(shell . $(VersionFile); echo $$PLUGIN_SHA)
 RUN_AS        ?= ubuntu
 ENVIRONMENT   ?= test
 workDir       ?= /workdir
@@ -99,7 +99,7 @@ publish:
 validate:  $(SECRETS_FILE) $(PACKER_LOG_DIR)
 	$(DOCKER_CMD) $(DOCKER_RUN) $(ContainerName) validate $(JSON_FILE)
 
-build: $(SECRETS_FILE) $(PACKER_LOG_DIR)
+build: $(SECRETS_FILE) $(PACKER_LOG_DIR) $(TMP_DIR)
 	$(DOCKER_CMD) $(DOCKER_RUN) $(ContainerName) build $(JSON_FILE)
 
 no-ansible: $(SECRETS_FILE) $(PACKER_LOG_DIR)
