@@ -4,7 +4,8 @@
     "sl_api_key": "{{env `SL_API_KEY`}}",
     "ansible_inventory_file": "{{env `ANSIBLE_INVENTORY_FILE`}}",
     "private_key_file": "{{env `PRIVATEKEY`}}",
-    "public_key_file": "{{env `PUBLICKEY`}}"
+    "public_key_file": "{{env `PUBLICKEY`}}",
+    "run_as_user": "{{env `RUN_AS`}}"
   },
   "provisioners": [
     {
@@ -20,7 +21,7 @@
       "extra_arguments": [
 	      "-vvvv",
         "--extra-vars",
-        "ansible_user=ubuntu --private-key={{user `private_key_file`}}"
+        "ansible_user={{user `run_as_user`}} --private-key={{user `private_key_file`}}"
       ],
       "ansible_env_vars": [
         "ANSIBLE_HOST_KEY_CHECKING=False",

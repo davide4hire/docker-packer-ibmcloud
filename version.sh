@@ -1,7 +1,7 @@
 # This file is sourced to set various values used in the build process.
 
 # This is the version of this packer-ibmcloud container.
-VERSION=1.0.9
+VERSION=1.0.10
 
 # These two vars specify the base URL and version of the base
 # packer container.

@@ -10,7 +10,7 @@ PACKER_CONTAINER_VERSION := $(shell . $(VersionFile); echo $$PACKER_CONTAINER_VE
 PLUGIN_GIT_URL := $(shell . $(VersionFile); echo $$PLUGIN_GIT_URL)
 PLUGIN_VERSION := $(shell . $(VersionFile); echo $$PLUGIN_VERSION)
 PLUGIN_SHA     := $(shell . $(VersionFile); echo $$PLUGIN_SHA)
-RUN_AS        ?= ubuntu
+RUN_AS        ?= root
 ENVIRONMENT   ?= test
 workDir       ?= /workdir
 TMP_DIR       ?= ./tmp
@@ -27,8 +27,12 @@ SECRETS_FILE  ?= .env
 ANSIBLE_INVENTORY_FILE ?= $(TMP_DIR)/provisioner-hosts
 ANSIBLE_HOST_KEY_CHECKING ?= False
 OBJC_DISABLE_INITIALIZE_FORK_SAFETY ?= YES
-SSH_KEY_NAME           ?= is_rsa
-PRIVATEKEY             ?= /home/$(RUN_AS)/.ssh/$(SSH_KEY_NAME)
+SSH_KEY_NAME           ?= id_rsa
+ifeq ($(RUN_AS),root)
+  PRIVATEKEY             ?= /root/.ssh/$(SSH_KEY_NAME)
+else
+  PRIVATEKEY             ?= /home/$(RUN_AS)/.ssh/$(SSH_KEY_NAME)
+endif
 PUBLICKEY              ?= $(PRIVATEKEY).pub
 JSON_FILE              ?= centos.json
 NO_ANSIBLE_JSON_FILE    ?= centos-no-ansible.json
@@ -53,6 +57,7 @@ DOCKER_RUN=--env-file=$(SECRETS_FILE) \
 	--env ANSIBLE_INVENTORY_FILE=$(ANSIBLE_INVENTORY_FILE) \
 	--env ANSIBLE_HOST_KEY_CHECKING=$(ANSIBLE_HOST_KEY_CHECKING) \
 	--env OBJC_DISABLE_INITIALIZE_FORK_SAFETY=$(OBJC_DISABLE_INITIALIZE_FORK_SAFETY) \
+	--env RUN_AS=$(RUN_AS) \
 	--env PRIVATEKEY=$(PRIVATEKEY) \
 	--env PUBLICKEY=$(PUBLICKEY) \
 	--env PACKER_LOG=$(PACKER_LOG) \

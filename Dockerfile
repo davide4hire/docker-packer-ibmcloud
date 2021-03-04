@@ -14,7 +14,7 @@ ARG PLUGIN_VERSION
 ARG PLUGIN_GIT_URL
 
 # These can optionally be supplied with the build command
-ARG RUN_AS=ubuntu
+ARG RUN_AS=root
 ARG SSH_KEY_NAME=id_rsa
 
 RUN wget --quiet -O /bin/packer-builder-ibmcloud_${PLUGIN_VERSION}_alpine_64-bit.tar.gz ${PLUGIN_GIT_URL}/v${PLUGIN_VERSION}/packer-builder-ibmcloud_${PLUGIN_VERSION}_alpine_64-bit.tar.gz
